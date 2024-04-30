@@ -6,9 +6,6 @@ on:
       tagName:
         description: 'Tag Name'
         required: true
-      environment:
-        description: 'Environment (develop, qa, staging, prod)'
-        required: true
 
 jobs:
   deploy:
@@ -21,10 +18,9 @@ jobs:
       packages: write
     runs-on: ubuntu-latest
     steps:
-      - name: Log Inputs
+      - name: Log Input
         run: |
           echo "Tag Name: ${{ github.event.inputs.tagName }}"
-          echo "Environment: ${{ github.event.inputs.environment }}"
       - name: Check out code
         uses: actions/checkout@v4
         with:
@@ -33,7 +29,7 @@ jobs:
       - name: Update values.yaml
         run: |
           TAG_NAME="${{ github.event.inputs.tagName }}"
-          ENVIRONMENT="${{ github.event.inputs.environment }}"
+          ENVIRONMENT="${{ TAG_NAME.split('-')[0] }}"
           echo "Deploying tag $TAG_NAME to $ENVIRONMENT environment."
           ls
           cd helm_values
