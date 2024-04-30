@@ -32,8 +32,8 @@ jobs:
           token: ${{ secrets.GH_PAT_TOKEN }}
       - name: Update values.yaml
         run: |
-          TAG_NAME="${{ github.ref }}".replace('refs/tags/', '')
-          ENVIRONMENT="${{ TAG_NAME.split('-')[0] }}"
+          TAG_NAME="${GITHUB_REF/refs\/tags\//}" # Strip 'refs/tags/' from GITHUB_REF
+          ENVIRONMENT="${TAG_NAME%-*}"
           echo "Extracted tag name: ${{ TAG_NAME }}"
           echo "Environment: ${{ ENVIRONMENT }}"
           ls
