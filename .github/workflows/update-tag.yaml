@@ -29,7 +29,7 @@ jobs:
       - name: Update values.yaml
         run: |
           TAG_NAME="${{ github.event.inputs.tagName }}"
-          ENVIRONMENT="${{ TAG_NAME.split('-')[0] }}"
+          ENVIRONMENT="${TAG_NAME%-*}"
           echo "Deploying tag $TAG_NAME to $ENVIRONMENT environment."
           ls
           cd helm_values
