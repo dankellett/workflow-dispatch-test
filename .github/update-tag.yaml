@@ -1,0 +1,41 @@
+name: Update Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tagName:
+        description: 'Tag Name'
+        required: true
+      environment:
+        description: 'Environment (develop, qa, staging, prod)'
+        required: true
+
+jobs:
+  deploy:
+    permissions:
+      contents: write
+      pull-requests: write
+      checks: write
+      actions: read
+      id-token: write
+      packages: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Inputs
+        run: |
+          echo "Tag Name: ${{ github.event.inputs.tagName }}"
+          echo "Environment: ${{ github.event.inputs.environment }}"
+      - name: Update values.yaml
+        run: |
+          TAG_NAME="${{ github.event.inputs.tagName }}"
+          ENVIRONMENT="${{ github.event.inputs.environment }}"
+          echo "Deploying tag $TAG_NAME to $ENVIRONMENT environment."
+          ls
+          cd helm_values
+          VALUES_FILE="values-$ENVIRONMENT.yaml"
+          sed -i "s|tag:.*|tag: $TAG_NAME|" $VALUES_FILE
+          git config --global user.name '${{ secrets.USER_NAME }}'
+          git config --global user.email '${{ secrets.USER_EMAIL }}'
+          git add $VALUES_FILE
+          git commit -m "Update $VALUES_FILE with tag $TAG_NAME"
+          git push
