@@ -4,7 +4,7 @@ deploymentPort: 3000
 image:
   repository: ghcr.io/dankellett/workdlow-dispatch-test
   pullPolicy: Always
-  tag: develop-changeme
+  tag: develop-34342
 
 imagePullSecrets:
   - name: dockerconfigjson-github-com
