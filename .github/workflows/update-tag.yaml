@@ -25,6 +25,11 @@ jobs:
         run: |
           echo "Tag Name: ${{ github.event.inputs.tagName }}"
           echo "Environment: ${{ github.event.inputs.environment }}"
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          ref: qa
+          token: ${{ secrets.GH_PAT_TOKEN }}
       - name: Update values.yaml
         run: |
           TAG_NAME="${{ github.event.inputs.tagName }}"
